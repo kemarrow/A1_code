@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec 15 17:01:33 2020
-
+This reads in the masked image, identifies the stars/galaxies and produces a list of
+the contours bounding each star/galaxy. For each contour, it then finds the coordinates 
+of the centre, the intensity of each pixel within the contour, and the local background.
+Each source grater than 10 pixels is fitted with Sersic and Moffat profiles and the sum 
+of the residuals is compared to assess the goodness of fit and identify the shapes as
+stars or galaxies. The information about each source is then appended to a catalogue, 
+results.csv, and galaxy information is also appended to a separate catalogue, galaxies.csv
 @author: Katherine and Erin
 """
 
@@ -97,7 +103,8 @@ for i in range(0, len(contour)):
         background.append(imdata2[yleft,n])
         background.append(imdata2[yright,n])
     median_background = np.median(background)
-
+    
+    # finds the centre of the contour, weighted according to pixel intensity
     xcoords = []
     ycoords= []
     for l in range(xmin,xmax+1):
